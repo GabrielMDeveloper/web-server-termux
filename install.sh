@@ -136,11 +136,11 @@ config_atalhos(){
 shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
-  SHELL_CONTENT_TXT="#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)\n
-  export PATH=$HOME/.server/
+  SHELL_CONTENT_TXT="#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)
+  export PATH=$HOME/.server/"'
   mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
   alias qrcode="qrencode -t utf8"
-  "
+  '
 
 
   #INCIO COM BOOT SERVIDOR WEB
@@ -148,7 +148,7 @@ shell_config() {
   read respost
 
   if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
-    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT \n#INCIO COM BOOT SERVIDOR WEB
+    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT "'\n#INCIO COM BOOT SERVIDOR WEB
       echo -e "\nIniciar servidor web? (Y/n)"
       read respost
 
@@ -157,7 +157,7 @@ shell_config() {
       else
           echo -e "\nServidor não iniciado"
       fi
-      ############################"
+      ############################'
   fi
 
   # Verifica se o .*rc ja existe
