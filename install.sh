@@ -217,17 +217,21 @@ full_install_server(){
     install_full
     config_server
 
-    if [[ "$SHELL" == *"/bash"* ]]; then
-        echo "Bash detectado."
-        source "$HOME/.bashrc"
+    source_rc(){
+      if [[ "$SHELL" == *"/bash"* ]]; then
+          source "$HOME/.bashrc"
 
-    elif [[ "$SHELL" == *"/zsh"* ]]; then
-        echo "Zsh detectado."
-        source "$HOME/.zshrc"
+      elif [[ "$SHELL" == *"/zsh"* ]]; then
+          source "$HOME/.zshrc"
 
-    elif [[ "$SHELL" == *"/fish"* ]]; then
-        echo "Fish detectado."
-        source "$HOME/.config/fish/config.fish"
+      elif [[ "$SHELL" == *"/fish"* ]]; then
+          source "$HOME/.config/fish/config.fish"
+
+      else
+          echo "Shell nao reconhecido ou nao suportado para configuracao automatica: $SHELL"
+      fi
+    }
+    source_rc
 }
 
 instalador(){
