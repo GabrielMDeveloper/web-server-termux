@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=$PREFIX/bin:$PATH
+
 install_apache(){
   echo -e "\n Instalando Apache \n"
   pkg install apache2 -y
@@ -166,23 +168,23 @@ alias qrcode=\"qrencode -t utf8\"
   fi
 
   # Verifica se o .*rc existe
-  if [ ! -f "$shell_rc_file" ]; then
+  if [ -f "$shell_rc_file" ]; then
       #Verifica se o conteudo ainda não foi adicionado
       if ! grep -qF "$SHELL_CONTENT_TXT" "$shell_rc_file"; then
 
           echo -e "\nAdicionando configuracoes ao $shell_rc_file...\n"
           echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"
-          echo -e "\nConteúdo adicionado com sucesso a $shell_rc_file.\n"
-          source "$shell_rc_file"
+          echo -e "\nConteúdo adicionado com sucesso a $shell_rc_file.\n"         
 
       else
           echo -e "\nConteúdo ja existe em $shell_rc_file. Nenhuma alteracao necessaria.\n"
       fi
 
   else
+      echo "Criando $shell_rc_file..."
       touch "$shell_rc_file"
-      echo -e "$SHELL_CONTENT_TXT" > "$shell_rc_file"
-      source "$shell_rc_file"
+      echo -e "\nEscrevendo configuracoes no $shell_rc_file...\n"
+      echo -e "$SHELL_CONTENT_TXT" > "$shell_rc_file"      
   fi
 
 }
@@ -214,6 +216,18 @@ shell_detect() {
 full_install_server(){
     install_full
     config_server
+
+    if [[ "$SHELL" == *"/bash"* ]]; then
+        echo "Bash detectado."
+        source "$HOME/.bashrc"
+
+    elif [[ "$SHELL" == *"/zsh"* ]]; then
+        echo "Zsh detectado."
+        source "$HOME/.zshrc"
+
+    elif [[ "$SHELL" == *"/fish"* ]]; then
+        echo "Fish detectado."
+        source "$HOME/.config/fish/config.fish"
 }
 
 instalador(){
