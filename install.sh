@@ -1,6 +1,8 @@
 #!/bin/bash
 
 export PATH=$PREFIX/bin:$PATH
+REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 
 install_apache(){
   echo -e "\n Instalando Apache \n"
@@ -97,13 +99,22 @@ apache_conf() {
 } #apache_conf
 
 server_copy(){
-  local server_dir="./.server"
+  local server_dir="$REPO_DIR/.server"
   local final_server_dir="$HOME/"
-  if [ -d "$final_server_dir/.server" ]; then
-    cp -r "$server_dir" "$final_server_dir"
-    echo "Pasta copiada para $final_server_dir/.server"
-  else
+
+  #Verifica se ainda não foi copiado
+  if [ ! -d "$final_server_dir/.server" ]; then
+
+    #verifica se a pasta existe no repo clonado
+    if [ -d "$server_dir" ]; then
+      cp -r "$server_dir" "$final_server_dir"
+      echo "Pasta foi copiada: $final_server_dir/.server"
+    else
       echo "A pasta foi corrompida, atalhos não instalados"
+    fi
+
+  else
+    echo "A Pasta já foi copiada: $final_server_dir/.server"
   fi
 }
 
