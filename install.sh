@@ -147,16 +147,17 @@ shell_config() {
   read respost
 
   if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
-    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT" '\n#INCIO COM BOOT SERVIDOR WEB
-      echo -e "\nIniciar servidor web? (Y/n)"
-      read respost
 
-      if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
-        Server start
-      else
-          echo -e "\nServidor não iniciado"
-      fi
-      ############################'
+  SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT\n#INICIO COM BOOT SERVIDOR WEB
+  echo -e \"\nIniciar servidor web? (Y/n)\"
+  read respost
+
+  if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
+      Server_start
+  else
+      echo -e \"\nServidor não iniciado\"
+  fi
+  ############################"
   fi
 
   # Verifica se o .*rc ja existe
