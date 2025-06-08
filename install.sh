@@ -136,31 +136,36 @@ config_atalhos(){
 shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
-  SHELL_CONTENT_TXT='#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)
-  export PATH="$HOME/.server/"
-  mariadbd-safe --datadir="/data/data/com.termux/files/usr/var/lib/mysql" > /dev/null 2>&1 &
-  alias qrcode="qrencode -t utf8"'
+  SHELL_CONTENT_TXT="#Configurações geradas por:
+#(https://github.com/GabrielMDeveloper/web-server-termux)
+export PATH=\"$HOME/.server/\"
 
+#Inicia o daemon do mariadb ao iniciar o termux
+mariadbd-safe --datadir=\"/data/data/com.termux/files/usr/var/lib/mysql\" > /dev/null 2>&1 &
+
+#Cria o alias qrcode para facilitar o uso manual
+alias qrcode=\"qrencode -t utf8\"
+"  
 
   #INCIO COM BOOT SERVIDOR WEB
   echo "Deseja iniciar o servidor web toda vez que iniciar o temux? (Y/n)"
   read respost
 
   if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
+    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT \n#INICIO COM BOOT SERVIDOR WEB
+    echo -e \"\nIniciar servidor web? (Y/n)\"
+    read respost
 
-  SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT\n#INICIO COM BOOT SERVIDOR WEB
-  echo -e \"\nIniciar servidor web? (Y/n)\"
-  read respost
-
-  if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
-      Server_start
-  else
-      echo -e \"\nServidor não iniciado\"
+    if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
+        web-server start
+    else
+        echo -e \"\nServidor não iniciado\"
+    fi
+    ############################"
+    
   fi
-  ############################"
-  fi
 
-  # Verifica se o .*rc ja existe
+  # Verifica se o .*rc existe
   if [ ! -f "$shell_rc_file" ]; then
       #Verifica se o conteudo ainda não foi adicionado
       if ! grep -qF "$SHELL_CONTENT_TXT" "$shell_rc_file"; then
