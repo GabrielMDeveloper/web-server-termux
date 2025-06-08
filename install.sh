@@ -21,7 +21,7 @@ install_mariadb(){
 }
 
 install_full(){
-  echo -e "\nInstalando apache, php, mariadb...\n"
+  echo -e "\nInstalando apache, php, mariadb, libqrencode...\n"
   pkg install -y apache2 php php-apache mariadb libqrencode
   echo -e "\n Pacotes instalados!\n"
 }
@@ -136,11 +136,10 @@ config_atalhos(){
 shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
-  SHELL_CONTENT_TXT="#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)
-  export PATH=$HOME/.server/"'
-  mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
-  alias qrcode="qrencode -t utf8"
-  '
+  SHELL_CONTENT_TXT='#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)
+  export PATH="$HOME/.server/"
+  mariadbd-safe --datadir="/data/data/com.termux/files/usr/var/lib/mysql" > /dev/null 2>&1 &
+  alias qrcode="qrencode -t utf8"'
 
 
   #INCIO COM BOOT SERVIDOR WEB
@@ -148,7 +147,7 @@ shell_config() {
   read respost
 
   if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
-    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT "'\n#INCIO COM BOOT SERVIDOR WEB
+    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT" '\n#INCIO COM BOOT SERVIDOR WEB
       echo -e "\nIniciar servidor web? (Y/n)"
       read respost
 
@@ -161,12 +160,12 @@ shell_config() {
   fi
 
   # Verifica se o .*rc ja existe
-  if [ -f "$shell_rc_file" ]; then
+  if [ ! -f "$shell_rc_file" ]; then
       #Verifica se o conteudo ainda não foi adicionado
       if ! grep -qF "$SHELL_CONTENT_TXT" "$shell_rc_file"; then
 
           echo -e "\nAdicionando configuracoes ao $shell_rc_file...\n"
-          echo -e "$SHELL_CONTENT_TXT" >>"$shell_rc_file"
+          echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"
           echo -e "\nConteúdo adicionado com sucesso a $shell_rc_file.\n"
           source "$shell_rc_file"
 
