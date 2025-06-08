@@ -19,4 +19,4 @@ Abra o Termux e execute os comandos abaixo:
 > `termux-change-repo`
 > e escolher um gupo mais proximo de sua localização
 
-  `pkg update -y && pkg upgrade -y && pkg install git -y && git clone https://github.com/GabrielMDeveloper/web-server-termux && cd web-server-termux && chmod +x install.sh && ./install.sh`
+    pkg update -y && pkg upgrade -y && pkg install git -y && git clone https://github.com/GabrielMDeveloper/web-server-termux && cd web-server-termux && chmod +x install.sh && ./install.sh
