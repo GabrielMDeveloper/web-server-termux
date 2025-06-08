@@ -150,10 +150,9 @@ shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
   SHELL_CONTENT_TXT="#Configurações geradas por:
-#Adicionado por: 
-(https://github.com/GabrielMDeveloper/web-server-termux)
+#(https://github.com/GabrielMDeveloper/web-server-termux)
 
-export PATH=\"/data/data/com.termux/files/usr/bin:/data/data/com.termux/files/usr/bin/applets:$HOME/.server:$PATH\"
+export PATH=\"/data/data/com.termux/files/usr/bin/applets:$HOME/.server:$PATH\"
 
 
 #Inicia o daemon do mariadb ao iniciar o termux
@@ -165,19 +164,20 @@ alias qrcode=\"qrencode -t utf8\"
 
   #INCIO COM BOOT SERVIDOR WEB
   echo "Deseja iniciar o servidor web toda vez que iniciar o temux? (Y/n)"
-  read respost
+  read resposta
 
-  if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
-    SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT \n#INICIO COM BOOT SERVIDOR WEB
-    echo -e \"\nIniciar servidor web? (Y/n)\"
-    read respost
+  if [[ "$resposta" =~ ^[Yy]$ || -z "$resposta" ]]; then
 
-    if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
-        web-server start
-    else
-        echo -e \"\nServidor não iniciado\"
-    fi
-    ############################"
+SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT \n#INICIO COM BOOT SERVIDOR WEB
+echo -e \"Iniciar servidor web? (Y/n)\"
+read respost
+
+if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
+    web-server start
+else
+    echo -e \"Servidor não iniciado\"
+fi
+############################"
     
   fi
 
