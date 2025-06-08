@@ -94,12 +94,23 @@ apache_conf() {
   fi
 } #apache_conf
 
+server_copy(){
+  local server_dir="./.server"
+  local final_server_dir="$HOME/"
+  if [ -d "$final_server_dir/.server" ]; then
+    cp -r "$server_dir" "$final_server_dir"
+    echo "Pasta copiada para $final_server_dir/.server"
+  else
+      echo "A pasta foi corrompida, atalhos não instalados"
+  fi
+}
 
 config_server(){
   apache_bck
   apache_conf
   shell_detect
   config_atalhos
+  server_copy
 }
 
 config_atalhos(){
@@ -126,7 +137,7 @@ shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
   SHELL_CONTENT_TXT="#Configurações geradas por (https://github.com/GabrielMDeveloper/web-server-termux)\n
-  export PATH=$HOME/.server/\n
+  export PATH=$HOME/.server/
   mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
   alias qrcode="qrencode -t utf8"
   "
