@@ -1,0 +1,56 @@
+#!/bin/bash
+
+logs_dir="$HOME/.server/.logs"
+
+user_ip() {
+    ifconfig 2>/dev/null | grep '192' | awk '{print $2}'
+}
+
+qrcode() {
+    local link="$1"
+    qrencode -t utf8 "http://$link:8080"
+}
+
+server_start() {
+    mkdir -p "$logs_dir"
+    local ip=$(user_ip)
+    mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$logs_dir" 2>&1 &
+    sleep 1
+    apachectl start
+    sleep 2
+    clear
+    echo "Web Server Iniciado"
+    echo -e "\nIp: para acesso de outros dispositivos:\n $ip \n"
+    qrcode "$ip"
+}
+
+server_stop() {
+    pkill mariadbd
+    apachectl stop
+    sleep 2
+}
+
+case "$1" in
+
+start)
+    server_start
+    echo -e "\nWeb Server iniciado"
+    ;;
+stop)
+    server_stop
+    echo -e "\nWeb Server Finalizado"
+    ;;
+restart)
+    server_stop
+    sleep 2
+    server_start
+    echo -e"\nWeb Server reiniciado\n"
+    ;;
+help)
+    echo -e "Este comando inicia, para, e reinicia o servidor web (Apache2, php, Mariadb)\n Uso: $0 {start|stop|restart|help}"
+    ;;
+*)
+    echo "Uso: $0 {start|stop|restart|help}"
+    exit 1
+    ;;
+esac
