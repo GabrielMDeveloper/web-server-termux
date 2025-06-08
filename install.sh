@@ -150,8 +150,11 @@ shell_config() {
   local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
   SHELL_CONTENT_TXT="#Configurações geradas por:
-#(https://github.com/GabrielMDeveloper/web-server-termux)
-export PATH=\"$HOME/.server/\"
+#Adicionado por: 
+(https://github.com/GabrielMDeveloper/web-server-termux)
+
+export PATH=\"/data/data/com.termux/files/usr/bin:/data/data/com.termux/files/usr/bin/applets:$HOME/.server:$PATH\"
+
 
 #Inicia o daemon do mariadb ao iniciar o termux
 mariadbd-safe --datadir=\"/data/data/com.termux/files/usr/var/lib/mysql\" > /dev/null 2>&1 &
