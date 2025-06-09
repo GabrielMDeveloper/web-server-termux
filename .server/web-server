@@ -3,6 +3,7 @@
 # Variaveis de sistema
 logs_dir="$HOME/.server/.logs"
 mariadb_log="$logs_dir/mariadb.log"
+apache2_log="$logs_dir/apache2.log"
 
 user_ip() {
     ifconfig 2>/dev/null | grep '192' | awk '{print $2}'
@@ -18,7 +19,7 @@ server_start() {
     local ip=$(user_ip)
     mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$mariadb_log" 2>&1 &
     sleep 1
-    apachectl start
+    apachectl start > "$apache2_log" 2>&1
     sleep 2
     clear
     echo "Web Server Iniciado"
@@ -27,8 +28,8 @@ server_start() {
 }
 
 server_stop() {
-    pkill mariadbd
-    apachectl stop
+    pkill mariadbd > "$mariadb_log" 2>&1
+    apachectl stop > "$apache2_log" 2>&1
     sleep 2
 }
 
@@ -46,13 +47,13 @@ restart)
     server_stop
     sleep 2
     server_start
-    echo -e"\nWeb Server reiniciado\n"
+    echo -e "\nWeb Server reiniciado\n"
     ;;
 help)
-    echo -e "Este comando inicia, para, e reinicia o servidor web (Apache2, php, Mariadb)\n Uso: $0 {start|stop|restart|help}"
+    echo -e "Este comando inicia, para, e reinicia o servidor web (Apache2, php, Mariadb)\n Uso: web-server {start|stop|restart|help}"
     ;;
 *)
-    echo "Uso: $0 {start|stop|restart|help}"
+    echo "Uso: web-server {start|stop|restart|help}"
     exit 1
     ;;
 esac

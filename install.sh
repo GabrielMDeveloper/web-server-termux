@@ -2,6 +2,7 @@
 
 export PATH=$PREFIX/bin:$PATH
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+atalhos_dir="$HOME/atalhos-servidor"
 
 install_apache(){
   echo -e "\n Instalando Apache \n"
@@ -127,7 +128,6 @@ config_server(){
 }
 
 config_atalhos(){
-    atalhos_dir="$HOME/atalhos-servidor"
     atalhos_apache="$atalhos_dir/apache-conf"
 
     a_apache_conf="$PREFIX/etc/apache2/httpd.conf"
@@ -137,12 +137,13 @@ config_atalhos(){
 
     mkdir -p "$atalhos_dir"
     mkdir -p "$atalhos_apache"
-
+    touch "$a_php_conf"
     
     #ATALHO APACHE
     ln -sf "$a_apache_conf" "$atalhos_apache/httpd.conf"
     ln -sf "$a_apache_user_conf" "$atalhos_apache/user.conf"
     ln -sf "$a_htdocs_dir" "$atalhos_dir/htdocs"
+    ln -sf "$a_php_conf" "$atalhos_dir/php.ini"
 }
 
 
@@ -252,7 +253,8 @@ source_rc(){
 }
 
 alertas_finais(){
-  echo -e "\n\n
+  local help_txt="$atalhos_dir/help.txt"
+  local texto="\n\n
   Você pode controlar o servidor com o comando:
   [web-server {start|stop|restart}] 
 
@@ -267,7 +269,16 @@ alertas_finais(){
   mariadb-install-db \n
   mariadb-upgrade --force \n
   mariadb-secure-installation \n
-  "
+
+  Atenção: em seu arquivo de configuração mysql use o endereço 127.0.0.1 para acessar o servidor local.
+  Evite usar 'localhost' para evitar erros de conexão com o banco de dados, pois necessita de maiores configurações.
+
+  Estes avisos estão disponiveis em:
+  \$HOME/atalhos-servidor/help.txt"
+  
+  touch "$help_txt"
+  echo -e "#Gerado por:\n#(https://github.com/GabrielMDeveloper/web-server-termux)\n" >> "$help_txt"
+  echo -e "$texto" >> "$help_txt"
 }
 
 full_install_server(){
