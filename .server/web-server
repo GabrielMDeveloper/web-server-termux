@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# Variaveis de sistema
 logs_dir="$HOME/.server/.logs"
+mariadb_log="$logs_dir/mariadb.log"
 
 user_ip() {
     ifconfig 2>/dev/null | grep '192' | awk '{print $2}'
@@ -14,7 +16,7 @@ qrcode() {
 server_start() {
     mkdir -p "$logs_dir"
     local ip=$(user_ip)
-    mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$logs_dir" 2>&1 &
+    mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$mariadb_log" 2>&1 &
     sleep 1
     apachectl start
     sleep 2

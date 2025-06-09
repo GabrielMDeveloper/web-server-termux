@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Variaveis de sistema
 logs_dir="$HOME/.server/.logs"
+mariadb_log="$logs_dir/mariadb.log"
+
 server_start() {
     mkdir -p "$logs_dir"
-    mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$logs_dir" 2>&1 &
+    mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > "$mariadb_log" 2>&1 &
 }
 
 server_stop() {

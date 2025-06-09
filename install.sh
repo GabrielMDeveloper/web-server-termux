@@ -3,7 +3,6 @@
 export PATH=$PREFIX/bin:$PATH
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-
 install_apache(){
   echo -e "\n Instalando Apache \n"
   pkg install apache2 -y
@@ -147,45 +146,52 @@ config_atalhos(){
 
 
 shell_config() {
-  local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
+local shell_rc_file="$1" # Recebe o caminho do arquivo .rc
 
-  SHELL_CONTENT_TXT="#Configurações geradas por:
+SHELL_CONTENT_TXT="$(cat << 'EOF'
+#Configurações geradas por:
 #(https://github.com/GabrielMDeveloper/web-server-termux)
 
-export PATH=\"/data/data/com.termux/files/usr/bin/applets:$HOME/.server:$PATH\"
-
+# Exporta o ~/.server para o PATH
+export PATH="$PATH:$HOME/.server:/data/data/com.termux/files/usr/bin/applets"
 
 #Inicia o daemon do mariadb ao iniciar o termux
-mariadbd-safe --datadir=\"/data/data/com.termux/files/usr/var/lib/mysql\" > /dev/null 2>&1 &
+mariadbctl start
 
 #Cria o alias qrcode para facilitar o uso manual
-alias qrcode=\"qrencode -t utf8\"
-"  
+alias qrcode="qrencode -t utf8"
+EOF
+)"
 
-  #INCIO COM BOOT SERVIDOR WEB
-  echo "Deseja iniciar o servidor web toda vez que iniciar o temux? (Y/n)"
-  read resposta
+#INCIO COM BOOT SERVIDOR WEB
+echo "Deseja iniciar o servidor web toda vez que iniciar o temux? (Y/n)"
+read resposta
 
-  if [[ "$resposta" =~ ^[Yy]$ || -z "$resposta" ]]; then
+if [[ "$resposta" =~ ^[Yy]$ || -z "$resposta" ]]; then
 
-SHELL_CONTENT_TXT="$SHELL_CONTENT_TXT \n#INICIO COM BOOT SERVIDOR WEB
-echo -e \"Iniciar servidor web? (Y/n)\"
-read respost
-
-if [[ \"$respost\" =~ ^[Yy]$ || -z \"$respost\" ]]; then
-    web-server start
-else
-    echo -e \"Servidor não iniciado\"
-fi
-############################"
-    
+SHELL_CONTENT_TXT+="$(cat << 'EOF'
+# Função para iniciar o web-server ao abrir o terminal
+boot_start_server(){
+  echo -e "\nIniciar servidor web? (Y/n)"
+  read respost
+  # Verifica se o usuario digitou sim ou apertou <enter>
+  if [[ "$respost" =~ ^[Yy]$ || -z "$respost" ]]; then
+      web-server start
+  else
+      echo -e "\nServidor não iniciado\n"
   fi
+}
+boot_start_server
+##### web-server-termux #####
+EOF
+)"  
+  fi #INCIO COM BOOT SERVIDOR WEB
 
   # Verifica se o .*rc existe
   if [ -f "$shell_rc_file" ]; then
       #Verifica se o conteudo ainda não foi adicionado
       if ! grep -qF "$SHELL_CONTENT_TXT" "$shell_rc_file"; then
-
+          # adiciona o conteudo ao arquivo já existente
           echo -e "\nAdicionando configuracoes ao $shell_rc_file...\n"
           echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"
           echo -e "\nConteúdo adicionado com sucesso a $shell_rc_file.\n"         
@@ -195,13 +201,14 @@ fi
       fi
 
   else
-      echo "Criando $shell_rc_file..."
-      touch "$shell_rc_file"
-      echo -e "\nEscrevendo configuracoes no $shell_rc_file...\n"
-      echo -e "$SHELL_CONTENT_TXT" > "$shell_rc_file"      
+    # Cria o arquivo e escreve nele
+    echo "Criando $shell_rc_file..."
+    touch "$shell_rc_file"
+    echo -e "\nEscrevendo configuracoes no $shell_rc_file...\n"
+    echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"      
   fi
 
-}
+} # shell_config()
 
 #Detecta qual é o shell do usuario:
 shell_detect() {
@@ -224,7 +231,7 @@ shell_detect() {
         echo "Por favor, adicione as configuracoes manualmente ao seu arquivo de inicializacao do shell."
         echo -e "Conteudo a ser adicionado:\n\n$SHELL_CONFIG_CONTENT"
     fi
-}
+} #shell_detect()
 
 
 full_install_server(){
