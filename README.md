@@ -6,7 +6,7 @@ Este projeto permite criar e configurar rapidamente um **servidor web** diretame
 
 ## 📱 Requisitos
 
-- Aplicativo [Termux](https://https://github.com/termux/termux-app/releases/latest) instalado
+- Aplicativo [Termux](https://github.com/termux/termux-app/releases/latest) instalado
 - Conexão com a internet (apenas para instalação de pacotes)
 
 ---
