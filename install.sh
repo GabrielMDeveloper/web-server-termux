@@ -133,7 +133,7 @@ config_atalhos(){
     a_apache_conf="$PREFIX/etc/apache2/httpd.conf"
     a_apache_user_conf="$PREFIX/etc/apache2/conf.d/user.conf"
     a_htdocs_dir="$PREFIX/share/apache2/default-site/htdocs"
-    a_php_conf="$PREFIX/usr/lib/php.ini"
+    a_php_conf="$PREFIX/lib/php.ini"
 
     mkdir -p "$atalhos_dir"
     mkdir -p "$atalhos_apache"
