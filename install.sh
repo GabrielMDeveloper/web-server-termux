@@ -160,6 +160,7 @@ mariadbctl start
 
 #Cria o alias qrcode para facilitar o uso manual
 alias qrcode="qrencode -t utf8"
+
 EOF
 )"
 
@@ -193,7 +194,7 @@ EOF
       if ! grep -qF "$SHELL_CONTENT_TXT" "$shell_rc_file"; then
           # adiciona o conteudo ao arquivo já existente
           echo -e "\nAdicionando configuracoes ao $shell_rc_file...\n"
-          echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"
+          echo "$SHELL_CONTENT_TXT" >> "$shell_rc_file"
           echo -e "\nConteúdo adicionado com sucesso a $shell_rc_file.\n"         
 
       else
@@ -205,7 +206,8 @@ EOF
     echo "Criando $shell_rc_file..."
     touch "$shell_rc_file"
     echo -e "\nEscrevendo configuracoes no $shell_rc_file...\n"
-    echo -e "$SHELL_CONTENT_TXT" >> "$shell_rc_file"      
+    echo "$SHELL_CONTENT_TXT" >> "$shell_rc_file"    
+    echo -e "\n$shell_rc_file configurado\n"  
   fi
 
 } # shell_config()
