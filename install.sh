@@ -233,25 +233,32 @@ shell_detect() {
     fi
 } #shell_detect()
 
+source_rc(){
+  if [[ "$SHELL" == *"/bash"* ]]; then
+      source "$HOME/.bashrc"
+
+  elif [[ "$SHELL" == *"/zsh"* ]]; then
+      source "$HOME/.zshrc"
+
+  elif [[ "$SHELL" == *"/fish"* ]]; then
+      source "$HOME/.config/fish/config.fish"
+
+  else
+      echo "Shell nao reconhecido ou nao suportado para configuracao automatica: $SHELL"
+  fi
+}
+
+alertas_finais(){
+  echo -e "\n\nPara iniciar o Mariadb pela primeira vez você deve executar:\n
+  mariadb-install-db \n
+  mariadb-upgrade --force \n
+  mariadb-secure-installation\n
+  "
+}
 
 full_install_server(){
     install_full
     config_server
-
-    source_rc(){
-      if [[ "$SHELL" == *"/bash"* ]]; then
-          source "$HOME/.bashrc"
-
-      elif [[ "$SHELL" == *"/zsh"* ]]; then
-          source "$HOME/.zshrc"
-
-      elif [[ "$SHELL" == *"/fish"* ]]; then
-          source "$HOME/.config/fish/config.fish"
-
-      else
-          echo "Shell nao reconhecido ou nao suportado para configuracao automatica: $SHELL"
-      fi
-    }
     source_rc
 }
 
@@ -293,6 +300,7 @@ instalador(){
     done
 
     echo 'Saindo...'
+    alertas_finais
 }
 
 instalador
