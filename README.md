@@ -15,8 +15,8 @@ Este projeto permite criar e configurar rapidamente um **servidor web** diretame
 
 Abra o Termux e execute os comandos abaixo:
 
-> Recomendo primeiro executar
-> `termux-change-repo`
+> Recomendo primeiro executar <br>
+> `termux-change-repo` <br>
 > e escolher um gupo mais proximo de sua localização
 > para melhor velocidade de instalação de pacotes
 
