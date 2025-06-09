@@ -161,7 +161,7 @@ export PATH="$PATH:$HOME/.server:/data/data/com.termux/files/usr/bin/applets"
 mariadbctl start
 
 #Cria o alias qrcode para facilitar o uso manual
-alias qrcode="qrencode -t utf8"
+alias qrcode="qrencode -t ANSIUTF8"
 EOF
 )"
 

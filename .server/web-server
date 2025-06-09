@@ -11,7 +11,7 @@ user_ip() {
 
 qrcode() {
     local link="$1"
-    qrencode -t utf8 "http://$link:8080"
+    qrencode -t ANSIUTF8 "http://$link:8080"
 }
 
 server_start() {
