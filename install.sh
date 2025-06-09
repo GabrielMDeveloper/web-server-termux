@@ -140,9 +140,9 @@ config_atalhos(){
 
     
     #ATALHO APACHE
-    ln -s "$a_apache_conf" "$atalhos_apache/httpd.conf"
-    ln -s "$a_apache_user_conf" "$atalhos_apache/user.conf"
-    ln -s "$a_htdocs_dir" "$atalhos_dir/htdocs"
+    ln -sf "$a_apache_conf" "$atalhos_apache/httpd.conf"
+    ln -sf "$a_apache_user_conf" "$atalhos_apache/user.conf"
+    ln -sf "$a_htdocs_dir" "$atalhos_dir/htdocs"
 }
 
 
@@ -247,15 +247,26 @@ source_rc(){
       source "$HOME/.config/fish/config.fish"
 
   else
-      echo "Shell nao reconhecido ou nao suportado para configuracao automatica: $SHELL"
+      echo "Shell nao reconhecido ou nao suportado para: source $SHELL"
   fi
 }
 
 alertas_finais(){
-  echo -e "\n\nPara iniciar o Mariadb pela primeira vez você deve executar:\n
+  echo -e "\n\n
+  Você pode controlar o servidor com o comando:
+  [web-server {start|stop|restart}] 
+
+  ou controlar o mariadb com:
+  [mariadbctl {start|stop|restart}] 
+
+  *Extra! Você pode mostrar um qrcode usando:
+  [qrcode {texto ou link}]
+  ex: qrcode localhost:8080
+  
+  Para iniciar o Mariadb pela primeira vez você deve executar: \n
   mariadb-install-db \n
   mariadb-upgrade --force \n
-  mariadb-secure-installation\n
+  mariadb-secure-installation \n
   "
 }
 
