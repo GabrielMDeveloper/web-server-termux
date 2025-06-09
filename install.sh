@@ -99,7 +99,7 @@ apache_conf() {
 
 server_copy(){
   local server_dir="$REPO_DIR/.server"
-  local final_server_dir="$HOME/"
+  local final_server_dir="$HOME"
 
   #Verifica se ainda não foi copiado
   if [ ! -d "$final_server_dir/.server" ]; then
@@ -107,9 +107,10 @@ server_copy(){
     #verifica se a pasta existe no repo clonado
     if [ -d "$server_dir" ]; then
       cp -r "$server_dir" "$final_server_dir"
+      chmod -R +x "$final_server_dir/.server/"
       echo "Pasta foi copiada: $final_server_dir/.server"
     else
-      echo "A pasta foi corrompida, atalhos não instalados"
+      echo "A pasta não foi encontrada, atalhos não instalados"
     fi
 
   else
@@ -160,7 +161,6 @@ mariadbctl start
 
 #Cria o alias qrcode para facilitar o uso manual
 alias qrcode="qrencode -t utf8"
-
 EOF
 )"
 
@@ -170,7 +170,8 @@ read resposta
 
 if [[ "$resposta" =~ ^[Yy]$ || -z "$resposta" ]]; then
 
-SHELL_CONTENT_TXT+="$(cat << 'EOF'
+SHELL_CONTENT_TXT+="
+$(cat << 'EOF'
 # Função para iniciar o web-server ao abrir o terminal
 boot_start_server(){
   echo -e "\nIniciar servidor web? (Y/n)"
