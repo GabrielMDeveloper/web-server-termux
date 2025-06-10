@@ -5,8 +5,28 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 atalhos_dir="$HOME/atalhos-servidor"
 
 mariadb_conf(){
+  local user_file="/data/data/com.termux/files/usr/etc/my.cnf.d/user.cnf"
+  local user_file_content="$(cat <<'EOF'
+[mysqld]
+datadir=/data/data/com.termux/files/usr/var/lib/mysql
+socket=/data/data/com.termux/files/usr/var/run/mysqld.sock
+
+[client]
+socket=/data/data/com.termux/files/usr/var/run/mysqld.sock
+EOF
+)"
   echo -e "\nConfigurando MariaDB...\n"
-  mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
+  touch "$user_file"
+
+  #Verifica se o conteudo ainda não foi adicionado
+  if ! grep -qF "$user_file_content" "$user_file"; then
+   echo "$user_file_content" >> "$user_file"
+
+  else
+    echo -e "\nO mariadb já havia sido configurado!\n"
+  fi
+
+  mariadbd-safe > /dev/null 2>&1 &
   mariadb-install-db
   mariadb-upgrade --force
   echo -e "\nMariaDB Pré-configurado!\n"
