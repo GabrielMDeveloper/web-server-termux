@@ -4,29 +4,45 @@ export PATH=$PREFIX/bin:$PATH
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 atalhos_dir="$HOME/atalhos-servidor"
 
+mariadb_conf(){
+  echo -e "\nConfigurando MariaDB...\n"
+  mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
+  mariadb-install-db
+  mariadb-upgrade --force
+  echo -e "\nMariaDB Pré-configurado!\n"
+}
+
 install_apache(){
-  echo -e "\n Instalando Apache \n"
+  echo -e "\nInstalando Apache\n"
   pkg install apache2 -y
-  echo -e "\n Apache instalado!\n"
+  echo -e "\nApache instalado!\n"
 }
 
 install_php(){
   echo -e "\nInstalando php + php-apache\n"
   pkg install php php-apache -y
-  echo
-  echo -e "php instalado!\n"
+  echo -e "\nphp instalado!\n"
 }
 
 install_mariadb(){
   echo -e "\nInstalando MariaDB\n"
   pkg install mariadb -y
-  echo
-  echo -e "mariadb instalado!\n"
+  echo -e "\nmariadb instalado!\n"
+  mariadb_conf
+}
+
+install_qrencode(){
+  echo -e "\nInstalando libqrencode\n"
+  pkg install -y libqrencode
+  echo -e "\nlibqrencode instalado!\n"
 }
 
 install_full(){
   echo -e "\nInstalando apache, php, mariadb, libqrencode...\n"
-  pkg install -y apache2 php php-apache mariadb libqrencode
+  install_apache
+  install_php
+  install_mariadb
+  install_qrencode
   echo -e "\n Pacotes instalados!\n"
 }
 
@@ -87,9 +103,9 @@ apache_conf() {
       touch "$test_php_dir"
       echo -e "<?php\nphpinfo()\n?>" > "$test_php_dir"
       echo -e "Arquivo criado!\n"
-      apachectl stop
-      apachectl start
-      echo -e "\nA url será aberta em seu navegador: http://localhost:8080\n"
+      apachectl stop > /dev/null 2>&1
+      apachectl start > /dev/null 2>&1
+      echo -e "\nA url será aberta em seu navegador: \nhttp://localhost:8080\n"
       sleep 2
       termux-open "http://localhost:8080"
   else
