@@ -26,7 +26,8 @@ EOF
     echo -e "\nO mariadb já havia sido configurado!\n"
   fi
 
-  mariadbd-safe > /dev/null 2>&1 &
+  mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
+  sleep 2
   mariadb-install-db
   mariadb-upgrade --force
   echo -e "\nMariaDB Pré-configurado!\n"
