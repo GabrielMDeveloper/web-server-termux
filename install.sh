@@ -26,8 +26,19 @@ EOF
     echo -e "\nO mariadb já havia sido configurado!\n"
   fi
 
+  # Inicia o daemon do mariadb 
   mariadbd-safe --datadir='/data/data/com.termux/files/usr/var/lib/mysql' > /dev/null 2>&1 &
-  sleep 2
+  
+  # Aguarda até o mariadb aceitar a conexão
+  for i in {1..30}; do
+    if mariadb -e "SELECT 1;" > /dev/null 2>&1; then
+      echo "MariaDB está pronto!"
+      break
+    fi
+    echo "Aguardando o MariaDB iniciar... ($i)"
+    sleep 1
+  done
+
   mariadb-install-db
   mariadb-upgrade --force
   echo -e "\nMariaDB Pré-configurado!\n"
